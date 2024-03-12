@@ -4,8 +4,8 @@
 #ignore dist/
 dist/
 
-#ignore __pycache
-__pycache__
+#ignore pycache
+__pycache__/
 
 #ignore .env
 *.env
