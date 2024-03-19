@@ -16,7 +16,7 @@ connection = psycopg2.connect(DATABASE_URL)
 def home():
     return render_template('home.html')
 
-@app.route('/urls')
+@app.route('/urls', methods=['POST'])
 def post_urls():
     url = request.form['url']
     errors = validate(url)
@@ -25,8 +25,11 @@ def post_urls():
     with connection.cursor() as cursor:
         cursor.execute(
             'insert into urls (name, created_at) values (%s, %s) returning id;',
-            (url, datetime.now()) 
+            (url, datetime.now())
         )
+        id = cursor.fetchone().id
+    connection.commit()
+    connection.close()
     return redirect(url_for('url_show', id=id))
 
 
@@ -35,3 +38,14 @@ def validate(url):
     if len(url) > 255:
         errors.append('url превышает 255 символов')
     return errors
+
+@app.route('/urls/<id>')
+def url_show(id):
+    with connection.cursor() as cursore:
+        cursore.execute(
+            'select * from urls where id = %s', (id,)
+        )
+        url = cursore.fetchone()
+    connection.commit()
+    connection.close()
+    return render_template('url.html', url=url)
