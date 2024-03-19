@@ -5,7 +5,7 @@
 dist/
 
 #ignore pycache
-__pycache__
+__pycache__/
 
 #ignore .env
-.env
+*.env
