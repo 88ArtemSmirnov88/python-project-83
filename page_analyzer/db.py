@@ -35,3 +35,9 @@ def get_url_by_name(connect, url):
         )
         url = cursor.fetchone()
     return url
+
+def get_urls(connect):
+    with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
+        cursor.execute('select * from urls;')
+        urls = cursor.fetchall()
+    return urls

@@ -15,6 +15,7 @@ psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
+watchgod = "^0.8.2"
 
 [build-system]
 requires = ["poetry-core"]
