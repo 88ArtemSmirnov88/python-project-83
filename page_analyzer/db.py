@@ -41,3 +41,19 @@ def get_urls(connect):
         cursor.execute('select * from urls;')
         urls = cursor.fetchall()
     return urls
+
+def insert_url_checks(connect, id):
+    with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
+        cursor.execute(
+            'insert into url_checks (url_id, created_at) values (%s, %s);',
+            (id, datetime.now())
+        )
+
+def get_url_checks(connect, id):
+    with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
+        cursor.execute(
+            'select * from url_checks where url_id = %s;',
+            (id,)
+        )
+        url_checks = cursor.fetchall()
+    return url_checks

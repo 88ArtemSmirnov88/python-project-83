@@ -7,15 +7,15 @@
             <tbody>
                 <tr>
                     <td>ID</td>
-                    <td>{{ url['id'] }}</td>
+                    <td>{{ url.id }}</td>
                 </tr>
                 <tr>
                     <td>Имя</td>
-                    <td>{{ url['name'] }}</td>
+                    <td>{{ url.name }}</td>
                 </tr>
                 <tr>
                     <td>Дата создания</td>
-                    <td>{{ url['created_at'] }}</td>
+                    <td>{{ url.created_at.strftime('%d.%m.%Y') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -36,6 +36,15 @@
                     <th>Дата создания</th>
                 </tr>
             </thead>
+
+            <body>
+                {% for check in url_checks %}
+                <tr>
+                    <td>{{ check.id }}</td>
+                    <td>{{ check.created_at.strftime('%d.%m.%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </body>
     </div>
 </div>
 {% endblock %}

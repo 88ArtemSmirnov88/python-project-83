@@ -43,8 +43,10 @@ def url_show(id):
     connect = db.connect_to_db()
     url = db.get_url_by_id(connect, id)
     connect.commit()
+    url_checks = db.get_url_checks(connect, id)
+    connect.commit()
     connect.close()
-    return render_template('url.html', url=url)
+    return render_template('url.html', url=url, url_checks=url_checks)
 
 @app.route('/urls')
 def urls_show():
@@ -59,4 +61,8 @@ def url_checks(id):
     connect = db.connect_to_db()
     url = db.get_url_by_id(connect, id)
     connect.commit()
+    db.insert_url_checks(connect, id)
+    connect.commit()
+    connect.close()
+    return redirect(url_for('url_show', id=id))
     
