@@ -23,7 +23,7 @@ def insert_url(connect, url):
 def get_url_by_id(connect, id):
     with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(
-            'select * from urls where id = %s', (id,)
+            'select * from urls where id = %s order by created_at desc', (id,)
         )
         url = cursor.fetchone()
     return url
@@ -42,17 +42,17 @@ def get_urls(connect):
         urls = cursor.fetchall()
     return urls
 
-def insert_url_checks(connect, id):
+def insert_url_checks(connect, id, status_code):
     with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(
-            'insert into url_checks (url_id, created_at) values (%s, %s);',
-            (id, datetime.now())
+            'insert into url_checks (url_id, status_code, created_at) values (%s, %s, %s);',
+            (id, status_code, datetime.now())
         )
 
 def get_url_checks(connect, id):
     with connect.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(
-            'select * from url_checks where url_id = %s;',
+            'select * from url_checks where url_id = %s order by created_at desc;',
             (id,)
         )
         url_checks = cursor.fetchall()

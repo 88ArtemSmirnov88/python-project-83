@@ -16,7 +16,10 @@
                 {% for url in urls %}
                 <tr>
                     <td>{{ url.id }}</td>
-                    <td>{{ url.name }}</td>
+                    <td>
+                        <a href="{{ url_for('url_show', id=url.id) }}">{{ url.name }}</a>
+                    </td>
+                    <td>{{ url.created_at.strftime('%d.%m.%Y') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

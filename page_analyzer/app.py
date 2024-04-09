@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import datetime
+import requests
 
 load_dotenv()
 
@@ -61,8 +62,17 @@ def url_checks(id):
     connect = db.connect_to_db()
     url = db.get_url_by_id(connect, id)
     connect.commit()
-    db.insert_url_checks(connect, id)
+    try:
+        response = requests.get(url.name)
+        status_code = response.status_code
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        flash('Произошла ошибка при проверке.', 'danger')
+        return redirect(url_for('url_show', id=id))
+
+    db.insert_url_checks(connect, id, status_code)
     connect.commit()
     connect.close()
+    flash('Страница успешно проверена.', 'success')
     return redirect(url_for('url_show', id=id))
     
