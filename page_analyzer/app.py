@@ -4,11 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import datetime
 import requests
+from page_analyzer import parser
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
+app.config['JSON_AS_ASCII'] = False
 
 def validate(url):
     errors = []
@@ -62,6 +64,7 @@ def url_checks(id):
     connect = db.connect_to_db()
     url = db.get_url_by_id(connect, id)
     connect.commit()
+
     try:
         response = requests.get(url.name)
         status_code = response.status_code
@@ -69,8 +72,9 @@ def url_checks(id):
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке.', 'danger')
         return redirect(url_for('url_show', id=id))
-
-    db.insert_url_checks(connect, id, status_code)
+    
+    page_data = parser.get_page_data(response)
+    db.insert_url_checks(connect, id, status_code, page_data)
     connect.commit()
     connect.close()
     flash('Страница успешно проверена.', 'success')
