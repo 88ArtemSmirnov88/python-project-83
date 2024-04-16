@@ -19,7 +19,7 @@
                     <td>
                         <a href="{{ url_for('url_show', id=url.id) }}">{{ url.name }}</a>
                     </td>
-                    <td>{{ url.created_at.strftime('%d.%m.%Y') }}</td>
+                    <td>{{ '' if url.created_at is none else url.create_at.strftime('%d.%m.%Y') }}</td>
                     <td>{{ '' if url.status_code is none else url.status_code }}</td>
                 </tr>
                 {% endfor %}
