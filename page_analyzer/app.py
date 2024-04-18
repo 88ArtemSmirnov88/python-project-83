@@ -1,10 +1,11 @@
-from page_analyzer import db
 import os
+import requests
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import datetime
-import requests
 from page_analyzer import parser
+from page_analyzer import validator
+from page_analyzer import db
 
 load_dotenv()
 
@@ -12,11 +13,6 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
 
-def validate(url):
-    errors = []
-    if len(url) > 255:
-        errors.append('url превышает 255 символов')
-    return errors
 
 @app.route('/')
 def home():
@@ -26,16 +22,17 @@ def home():
 def post_urls():
     connect = db.connect_to_db()
     url = request.form['url']
-    errors = validate(url)
+    errors = validator.validate(url)
     if errors:
         return render_template('home.html')
     
-    existed_url = db.get_url_by_name(connect, url)
+    normalized_url = validator.normalize(url)
+    existed_url = db.get_url_by_name(connect, normalized_url)
     if existed_url:
         id = existed_url.id
         flash('Страница уже существует', 'info')
     else:
-        id = db.insert_url(connect, url)
+        id = db.insert_url(connect, normalized_url)
         connect.commit()
         flash('Страница успешно добавлена', 'success')
     connect.close()
