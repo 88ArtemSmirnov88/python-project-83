@@ -67,13 +67,13 @@ def url_checks(id):
         status_code = response.status_code
         response.raise_for_status()
     except requests.exceptions.RequestException:
-        flash('Произошла ошибка при проверке.', 'danger')
+        flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('url_show', id=id))
     
     page_data = parser.get_page_data(response)
     db.insert_url_checks(connect, id, status_code, page_data)
     connect.commit()
     connect.close()
-    flash('Страница успешно проверена.', 'success')
+    flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_show', id=id))
     
