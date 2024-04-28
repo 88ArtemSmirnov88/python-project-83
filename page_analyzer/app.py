@@ -24,6 +24,8 @@ def post_urls():
     url = request.form['url']
     errors = validator.validate(url)
     if errors:
+        for error in errors:
+            flash(error, 'danger')
         return render_template('home.html')
     
     normalized_url = validator.normalize(url)
