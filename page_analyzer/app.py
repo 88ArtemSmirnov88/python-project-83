@@ -26,7 +26,7 @@ def post_urls():
     if errors:
         for error in errors:
             flash(error, 'danger')
-        return render_template('home.html')
+        return render_template('home.html'), 422
     
     normalized_url = validator.normalize(url)
     existed_url = db.get_url_by_name(connect, normalized_url)
