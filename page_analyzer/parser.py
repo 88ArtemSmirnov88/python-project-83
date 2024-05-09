@@ -6,9 +6,8 @@ def get_page_data(response):
     h1_tag = soup.find('h1').get_text() if soup.find('h1') is not None else ''
     title_tag = soup.find('title').get_text() if soup.find('title') is not None else ''
     description = soup.find('meta', attrs={'name': 'description'})
-
     if description:
-        description = description.get_text()
+        description = description['content']
     else:
         description = ''
 
