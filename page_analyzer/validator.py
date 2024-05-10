@@ -12,6 +12,7 @@ def validate(url):
         errors.append('URL обязателен')
     return errors
 
+
 def normalize(url):
     output = urlparse(url)
     scheme = output.scheme.lower()
